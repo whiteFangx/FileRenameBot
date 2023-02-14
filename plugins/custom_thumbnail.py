@@ -33,7 +33,7 @@ async def save_photo(bot, update):
 
     if update.media_group_id is not None:
         # album is sent
-        download_location = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id) + "/" + str(update.media_group_id) + "/"
+        download_location = f"{Config.DOWNLOAD_LOCATION}/{str(update.from_user.id)}/{str(update.media_group_id)}/"
         # create download directory, if not exist
         if not os.path.isdir(download_location):
             os.makedirs(download_location)
@@ -44,7 +44,9 @@ async def save_photo(bot, update):
         )
     else:
         # received single photo
-        download_location = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id) + ".jpg"
+        download_location = (
+            f"{Config.DOWNLOAD_LOCATION}/{str(update.from_user.id)}.jpg"
+        )
         await sql.df_thumb(update.from_user.id, update.message_id)
         await bot.download_media(
             message=update,
@@ -67,9 +69,9 @@ async def delete_thumbnail(bot, update):
         )
         return
 
-    thumb_image_path = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id) + ".jpg"
+    thumb_image_path = f"{Config.DOWNLOAD_LOCATION}/{str(update.from_user.id)}.jpg"
     #download_location = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id)
-    
+
     try:
         await sql.del_thumb(update.from_user.id) 
         #os.remove(download_location + ".json")
@@ -97,7 +99,7 @@ async def show_thumb(bot, update):
         )
         return
 
-    thumb_image_path = Config.DOWNLOAD_LOCATION + "/" + str(update.from_user.id) + ".jpg"
+    thumb_image_path = f"{Config.DOWNLOAD_LOCATION}/{str(update.from_user.id)}.jpg"
     if not os.path.exists(thumb_image_path):
         mes = await thumb(update.from_user.id)
         if mes != None:
@@ -106,7 +108,7 @@ async def show_thumb(bot, update):
             thumb_image_path = thumb_image_path
         else:
             thumb_image_path = None    
-    
+
     if thumb_image_path is not None:
         try:
             await bot.send_photo(
