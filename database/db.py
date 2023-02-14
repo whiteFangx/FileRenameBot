@@ -38,15 +38,14 @@ custom_caption.__table__.create(checkfirst=True)
 
 async def update_cap(id, caption):
     with INSERTION_LOCK:
-        cap = SESSION.query(custom_caption).get(id)
-        if not cap:
-            cap = custom_caption(id, caption)
-            SESSION.add(cap)
-            SESSION.flush()
-        else:
+        if cap := SESSION.query(custom_caption).get(id):
             SESSION.delete(cap)
             cap = custom_caption(id, caption)
             SESSION.add(cap)
+        else:
+            cap = custom_caption(id, caption)
+            SESSION.add(cap)
+            SESSION.flush()
         SESSION.commit()
 
 async def del_caption(id):
@@ -57,7 +56,6 @@ async def del_caption(id):
 
 async def get_caption(id):
     try:
-        caption = SESSION.query(custom_caption).get(id)
-        return caption
+        return SESSION.query(custom_caption).get(id)
     finally:
         SESSION.close()

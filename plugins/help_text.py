@@ -38,82 +38,80 @@ from database.db import *
 
 @Mai_bOTs.on_message(pyrogram.filters.command(["help"]))
 async def help_user(bot, update):
-    update_channel = Config.UPDATE_CHANNEL
-    if update_channel:
-        try:
-            user = await bot.get_chat_member(update_channel, update.chat.id)
-            if user.status == "kicked":
-               await update.reply_text(" Sorry, You're Banned")
-               return
-        except UserNotParticipant:
-            await update.reply_text(
-                text="**Due To The Huge Traffic Only Channel Members Can Use This Bot Means You Need To Join The Below Mentioned Channel Before Using Me! **",
-                reply_markup=InlineKeyboardMarkup([
-                    [ InlineKeyboardButton(text="Join My Updates Channel", url=f"https://t.me/{update_channel}")]
-              ])
-            )
-            return
-        else:
-            await bot.send_message(
-        chat_id=update.chat.id,
-        text=Translation.HELP_USER,
-        reply_markup=InlineKeyboardMarkup(
-            [
+    if update_channel := Config.UPDATE_CHANNEL:
+            try:
+                user = await bot.get_chat_member(update_channel, update.chat.id)
+                if user.status == "kicked":
+                   await update.reply_text(" Sorry, You're Banned")
+                   return
+            except UserNotParticipant:
+                await update.reply_text(
+                    text="**Due To The Huge Traffic Only Channel Members Can Use This Bot Means You Need To Join The Below Mentioned Channel Before Using Me! **",
+                    reply_markup=InlineKeyboardMarkup([
+                        [ InlineKeyboardButton(text="Join My Updates Channel", url=f"https://t.me/{update_channel}")]
+                  ])
+                )
+                return
+            else:
+                await bot.send_message(
+            chat_id=update.chat.id,
+            text=Translation.HELP_USER,
+            reply_markup=InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton('📝Rename', callback_data = "rnme"),
-                    InlineKeyboardButton('📂File To Video', callback_data = "f2v")
-                ],
-                [
-                    InlineKeyboardButton('🎞️Custom Thumbnail', callback_data = "cthumb"),
-                    InlineKeyboardButton('📑Custom Caption', callback_data = "ccaption")
-                ],
-                [
-                    InlineKeyboardButton('💬About', callback_data = "about")
+                    [
+                        InlineKeyboardButton('📝Rename', callback_data = "rnme"),
+                        InlineKeyboardButton('📂File To Video', callback_data = "f2v")
+                    ],
+                    [
+                        InlineKeyboardButton('🎞️Custom Thumbnail', callback_data = "cthumb"),
+                        InlineKeyboardButton('📑Custom Caption', callback_data = "ccaption")
+                    ],
+                    [
+                        InlineKeyboardButton('💬About', callback_data = "about")
+                    ]
                 ]
-            ]
-        )
-    )       
+            )
+        )       
 
 @Mai_bOTs.on_message(pyrogram.filters.command(["start"]))
 async def start_me(bot, update):
     if update.from_user.id in Config.BANNED_USERS:
         await update.reply_text("You are Banned")
         return
-    update_channel = Config.UPDATE_CHANNEL
-    if update_channel:
-        try:
-            user = await bot.get_chat_member(update_channel, update.chat.id)
-            if user.status == "kicked":
-               await update.reply_text(" Sorry,You've Been Flooding Me So My Owner Removed You From Using Me If You Think It's An Error Contact : @Faris_TG")
-               return
-        except UserNotParticipant:
-            await update.reply_text(
-                text="**Due To The Huge Traffic Only Channel Members Can Use This Bot Means You Need To Join The Below Mentioned Channel Before Using Me! **",
-                reply_markup=InlineKeyboardMarkup([
-                    [ InlineKeyboardButton(text="Join My Updates Channel", url=f"https://t.me/{update_channel}")]
-              ])
-            )
-            return
-        else:
-            await update.reply_text(Translation.START_TEXT.format(update.from_user.first_name),
-        reply_markup=InlineKeyboardMarkup(
-            [
+    if update_channel := Config.UPDATE_CHANNEL:
+            try:
+                user = await bot.get_chat_member(update_channel, update.chat.id)
+                if user.status == "kicked":
+                   await update.reply_text(" Sorry,You've Been Flooding Me So My Owner Removed You From Using Me If You Think It's An Error Contact : @Faris_TG")
+                   return
+            except UserNotParticipant:
+                await update.reply_text(
+                    text="**Due To The Huge Traffic Only Channel Members Can Use This Bot Means You Need To Join The Below Mentioned Channel Before Using Me! **",
+                    reply_markup=InlineKeyboardMarkup([
+                        [ InlineKeyboardButton(text="Join My Updates Channel", url=f"https://t.me/{update_channel}")]
+                  ])
+                )
+                return
+            else:
+                await update.reply_text(Translation.START_TEXT.format(update.from_user.first_name),
+            reply_markup=InlineKeyboardMarkup(
                 [
-                        InlineKeyboardButton("Help", callback_data = "ghelp")
-                ],
-                [
-                    InlineKeyboardButton('Support Channel', url='https://t.me/Mai_bOTs'),
-                    InlineKeyboardButton('Feedback', url='https://t.me/No_OnE_Kn0wS_Me')
-                ],
-                [
-                    InlineKeyboardButton('Other Bots', url='https://t.me/Mai_bOTs/17'),
-                    InlineKeyboardButton('Source', url='https://github.com/No-OnE-Kn0wS-Me/FileRenameBot')
+                    [
+                            InlineKeyboardButton("Help", callback_data = "ghelp")
+                    ],
+                    [
+                        InlineKeyboardButton('Support Channel', url='https://t.me/Mai_bOTs'),
+                        InlineKeyboardButton('Feedback', url='https://t.me/No_OnE_Kn0wS_Me')
+                    ],
+                    [
+                        InlineKeyboardButton('Other Bots', url='https://t.me/Mai_bOTs/17'),
+                        InlineKeyboardButton('Source', url='https://github.com/No-OnE-Kn0wS-Me/FileRenameBot')
+                    ]
                 ]
-            ]
-        ),
-        reply_to_message_id=update.message_id
-    )
-            return 
+            ),
+            reply_to_message_id=update.message_id
+        )
+                return 
 
 @Mai_bOTs.on_callback_query()
 async def cb_handler(client: Mai_bOTs , query: CallbackQuery):
